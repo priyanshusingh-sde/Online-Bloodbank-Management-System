@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CherryClouds - Online Blood Bank Management System</title>
+    <link rel="shortcut icon" href="https://www.svgrepo.com/show/475183/cherry.svg" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Clouds Animation Container -->
+    <div id="clouds-container"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🍒</span>
+                <span class="logo-text">CherryClouds</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+                <li><a href="#contact" class="nav-link">Write to Us</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="userLoginBtn">User Login</button>
+                <button class="btn btn-primary" id="adminLoginBtn">Admin Login</button>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="announcement">
+                    <span>🩸 Save a life with your blood donation today! New features launching soon!</span>
+                </div>
+                <h1 class="hero-title">
+                    Your smart<br>
+                    <span class="gradient-text">blood bank</span><br>
+                    companion
+                </h1>
+                <p class="hero-description">
+                    From managing donors to tracking blood inventory,<br>
+                    CherryClouds helps healthcare facilities save lives and<br>
+                    grow with your needs.
+                </p>
+                <button class="btn btn-hero">Get Started</button>
+                <div class="trusted-by">
+                    <span>Trusted by:</span>
+                    <div class="logos">
+                        <span>🏥 City Hospital</span>
+                        <span>🏥 Red Cross</span>
+                        <span>🏥 Health Center</span>
+                        <span>🏥 Blood Bank HQ</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-circle circle-1"></div>
+                <div class="floating-circle circle-2"></div>
+                <div class="floating-element star-1">✦</div>
+                <div class="floating-element star-2">✦</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">The Smartest All-in-One<br>Blood Bank System</h2>
+        <p class="section-subtitle">
+            Smarter blood management with Real-Time Tracking, predictions, and expert-based analytics, all in one place.
+        </p>
+        <div class="features-grid">
+            <div class="feature-card card-yellow">
+                <div class="feature-icon">🩸</div>
+                <h3>Real-time Blood & Inventory</h3>
+                <p>Track blood units, donors, and requests in real-time with smart notifications and alerts</p>
+            </div>
+            <div class="feature-card card-blue">
+                <div class="feature-icon">📊</div>
+                <h3>Advanced Analytics, All in One Place</h3>
+                <p>Insights to optimize donor campaigns, track trends, and improve blood availability</p>
+            </div>
+            <div class="feature-card card-green">
+                <div class="feature-icon">❤️</div>
+                <h3>Personalized Donor Management</h3>
+                <p>Engage donors with personalized notifications and maintain complete donor profiles</p>
+            </div>
+            <div class="feature-card card-purple">
+                <div class="feature-icon">⏰</div>
+                <h3>24/7 Support Any Time, Anywhere</h3>
+                <p>Round-the-clock system access with emergency request handling and instant support</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Know a new donor?<br>Help them with CherryClouds<br>and save their life.</h2>
+                <p>Help new donors in your life feel confident, supported, and ready to tackle every milestone with expert guidance, tools, and a community that truly understands.</p>
+                <button class="btn btn-primary">Explore Gift Card</button>
+            </div>
+            <div class="about-visual">
+                <div class="gift-card">
+                    <h3>Happy<br>Blood Donor's Day</h3>
+                    <div class="gift-icon">🎁</div>
+                    <div class="brand-badge">CherryClouds</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <h2 class="section-title-white">Why Donors Love CherryClouds</h2>
+        <p class="section-subtitle-white">Join a community of donors like you who give it all for those who rely on them</p>
+        <button class="btn btn-testimonial">Join the Club</button>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>CherryClouds has been a game-changer for managing our blood bank. The real-time tracking and donor alerts have helped us save countless lives.</p>
+                <div class="rating">★★★★★</div>
+            </div>
+            <div class="testimonial-card">
+                <p>Finally, a system that understands the urgency of blood management. The analytics help us predict demand and maintain optimal inventory levels.</p>
+                <div class="rating">★★★★★</div>
+            </div>
+            <div class="testimonial-card">
+                <p>Being a regular donor has never been easier. The personalized notifications remind me when I'm eligible to donate and where I'm needed most.</p>
+                <div class="rating">★★★★★</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="contact-container">
+            <h2>Write to Us</h2>
+            <p>Have questions or feedback? We'd love to hear from you!</p>
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Subject" required>
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>CherryClouds</h3>
+                <p>Saving lives through smart blood management</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: info@cherryclouds.com</p>
+                <p>Phone: +1 234 567 8900</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CherryClouds. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- User Login Modal -->
+    <div id="userLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal="userLoginModal">&times;</span>
+            <h2>User Login</h2>
+            <p class="modal-subtitle">Login to your account</p>
+            <form class="login-form" id="userLoginForm">
+                <!-- User Type Selection -->
+                <div class="user-type-selection">
+                    <label class="radio-label-inline">
+                        <input type="radio" name="loginUserType" value="donor" checked>
+                        <span class="radio-custom-inline"></span>
+                        <span>🩸 Donor</span>
+                    </label>
+                    <label class="radio-label-inline">
+                        <input type="radio" name="loginUserType" value="recipient">
+                        <span class="radio-custom-inline"></span>
+                        <span>❤️ Recipient</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" id="userEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="userPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="form-footer">Don't have an account? <a href="#" id="openRegisterModal">Register</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" data-modal="adminLoginModal">&times;</span>
+            <h2>Admin Login</h2>
+            <p class="modal-subtitle">Access administrator dashboard</p>
+            <form class="login-form" id="adminLoginForm">
+                <div class="form-group">
+                    <input type="text" id="adminId" placeholder="Admin ID" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="adminPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal">
+        <div class="modal-content registration-modal">
+            <span class="close" data-modal="registrationModal">&times;</span>
+            <h2>Register New User</h2>
+            <p class="modal-subtitle">Join CherryClouds and help save lives</p>
+            
+            <form class="login-form" id="registrationForm">
+                <!-- Registration Type Selection -->
+                <div class="registration-type">
+                    <label class="radio-label">
+                        <input type="radio" name="userType" id="donorRadio" value="donor" checked>
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">
+                            <strong>🩸 Register as Donor</strong>
+                            <small>Help save lives by donating blood</small>
+                        </span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="userType" id="recipientRadio" value="recipient">
+                        <span class="radio-custom"></span>
+                        <span class="radio-text">
+                            <strong>❤️ Register as Recipient</strong>
+                            <small>Request blood when in need</small>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Common Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" placeholder="Full Name *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email Address *" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="tel" placeholder="Phone Number *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" placeholder="Date of Birth *" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <select required>
+                            <option value="">Gender *</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select required>
+                            <option value="">Blood Group *</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" placeholder="Address *" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" placeholder="City *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="State *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="PIN Code *" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="password" placeholder="Password *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Confirm Password *" required>
+                    </div>
+                </div>
+
+                <!-- Donor Specific Fields -->
+                <div id="donorFields">
+                    <h3 class="section-heading">Donor Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="number" placeholder="Weight (kg) *" min="45" required>
+                        </div>
+                        <div class="form-group">
+                            <select required>
+                                <option value="">Last Donation *</option>
+                                <option value="never">Never Donated</option>
+                                <option value="3months">Less than 3 months</option>
+                                <option value="3-6months">3-6 months ago</option>
+                                <option value="6months">More than 6 months</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox">
+                            <span>I have no history of chronic diseases</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox">
+                            <span>I am not currently on medication</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox">
+                            <span>I agree to be contacted for emergency donations</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Recipient Specific Fields -->
+                <div id="recipientFields" style="display: none;">
+                    <h3 class="section-heading">Recipient Information</h3>
+                    
+                    <div class="form-group">
+                        <select required>
+                            <option value="">Urgency Level *</option>
+                            <option value="emergency">Emergency (Immediate)</option>
+                            <option value="urgent">Urgent (Within 24 hours)</option>
+                            <option value="scheduled">Scheduled</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="number" placeholder="Units Required *" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Hospital Name *" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Hospital Address *" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" placeholder="Doctor Name">
+                    </div>
+
+                    <div class="form-group">
+                        <textarea placeholder="Medical Condition / Reason for Blood Requirement *" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="tel" placeholder="Emergency Contact Number *" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" required>
+                        <span>I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Complete Registration</button>
+                <p class="form-footer">Already have an account? <a href="#" id="backToLogin">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

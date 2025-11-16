@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CherryClouds - Donor Dashboard</title>
+    <link rel="shortcut icon" href="https://www.svgrepo.com/show/475183/cherry.svg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            margin-right: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo::before {
+            content: '🍒';
+            margin-right: 10px;
+            font-size: 28px;
+        }
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: -280px;
+            top: 70px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .sidebar-title {
+            padding: 0 20px 10px;
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .sidebar-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #555;
+            transition: all 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background: #f5f7fa;
+            color: #667eea;
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(90deg, #667eea 0%, transparent 100%);
+            color: #667eea;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 70px;
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.shifted {
+            margin-left: 280px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-header p {
+            color: #666;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-info h3 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .stat-card.donations .stat-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stat-card.scheduled .stat-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .stat-card.points .stat-icon {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #f5576c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e04556;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            text-align: left;
+            padding: 15px;
+            background: #f5f7fa;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.scheduled {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-badge.confirmed {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status-badge.completed {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status-badge.cancelled {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content.shifted {
+                margin-left: 0;
+            }
+
+            .sidebar.open {
+                width: 100%;
+                left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="logo">CherryClouds</div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar">D</div>
+                <div>
+                    <div style="font-weight: 500;">Loading...</div>
+                    <div style="font-size: 12px; opacity: 0.8;">Blood Type: --</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Dashboard</div>
+            <div class="sidebar-item active" onclick="showSection('dashboard')">
+                📊 Overview
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Donations</div>
+            <div class="sidebar-item" onclick="showSection('schedule')">
+                🗓️ Schedule Donation
+            </div>
+            <div class="sidebar-item" onclick="showSection('history')">
+                📜 Donation History
+            </div>
+            <div class="sidebar-item" onclick="showSection('appointments')">
+                ⏰ My Appointments
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Profile</div>
+            <div class="sidebar-item" onclick="showSection('profile')">
+                👤 My Profile
+            </div>
+            <div class="sidebar-item" onclick="showSection('rewards')">
+                🏆 Rewards & Points
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-item" onclick="logout()">
+                🚪 Logout
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Dashboard Section -->
+        <div id="dashboardSection">
+            <div class="dashboard-header">
+                <h1>Welcome Back! 🩸</h1>
+                <p>Thank you for being a life saver.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card donations">
+                    <div class="stat-info">
+                        <h3>0</h3>
+                        <p>Total Donations</p>
+                    </div>
+                    <div class="stat-icon">💉</div>
+                </div>
+                <div class="stat-card scheduled">
+                    <div class="stat-info">
+                        <h3>0</h3>
+                        <p>Scheduled Appointments</p>
+                    </div>
+                    <div class="stat-icon">🗓️</div>
+                </div>
+                <div class="stat-card points">
+                    <div class="stat-info">
+                        <h3>0</h3>
+                        <p>Reward Points</p>
+                    </div>
+                    <div class="stat-icon">⭐</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Upcoming Appointments</h2>
+                    <button class="btn btn-primary" onclick="showSection('schedule')">+ Schedule New</button>
+                </div>
+                <div class="table-container">
+                    <table id="upcomingTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #999;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Section -->
+        <div id="scheduleSection" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Schedule Blood Donation</h1>
+                <p>Select your preferred date, time, and location for donation</p>
+            </div>
+
+            <div class="card">
+                <form id="scheduleForm" onsubmit="scheduleAppointment(event)">
+                    <div class="form-group">
+                        <label>Donation Date *</label>
+                        <input type="date" id="donationDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time *</label>
+                        <select id="donationTime" required>
+                            <option value="">Select time</option>
+                            <option value="09:00 AM">09:00 AM</option>
+                            <option value="10:00 AM">10:00 AM</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="12:00 PM">12:00 PM</option>
+                            <option value="02:00 PM">02:00 PM</option>
+                            <option value="03:00 PM">03:00 PM</option>
+                            <option value="04:00 PM">04:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Bank Location *</label>
+                        <select id="location" required>
+                            <option value="">Select location</option>
+                            <option value="City Blood Bank">City Blood Bank</option>
+                            <option value="Central Hospital">Central Hospital</option>
+                            <option value="Community Health Center">Community Health Center</option>
+                            <option value="Metro Blood Donation Center">Metro Blood Donation Center</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Special Requirements (Optional)</label>
+                        <textarea id="requirements" rows="4" placeholder="Any special requirements or notes..."></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+                        <button type="button" class="btn btn-secondary" onclick="showSection('dashboard')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div id="historySection" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Donation History</h1>
+                <p>View all your past blood donations</p>
+            </div>
+
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Blood Type</th>
+                                <th>Quantity (ml)</th>
+                                <th>Status</th>
+                                <th>Points Earned</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #999;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Section -->
+        <div id="appointmentsSection" style="display: none;">
+            <div class="dashboard-header">
+                <h1>My Appointments</h1>
+                <p>Manage your scheduled and past appointments</p>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">All Appointments</h2>
+                <div class="table-container">
+                    <table id="allAppointmentsTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #999;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" style="display: none;">
+            <!-- Profile will be dynamically loaded -->
+        </div>
+
+        <!-- Rewards Section -->
+        <div id="rewardsSection" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Rewards & Points</h1>
+                <p>Track your reward points and achievements</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Your Reward Points</h2>
+                </div>
+                <div style="text-align: center; padding: 40px;">
+                    <div style="font-size: 72px; font-weight: bold; color: #667eea; margin-bottom: 10px;">
+                        <span id="totalRewardPoints">0</span>
+                    </div>
+                    <p style="font-size: 18px; color: #666;">Total Reward Points Earned</p>
+                    <p style="margin-top: 20px; color: #999;">
+                        Earn 100 points for each successful donation!
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Achievements</h2>
+                </div>
+                <div style="display: grid; gap: 15px;">
+                    <div style="padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 8px; color: white;">
+                        <div style="font-size: 18px; font-weight: bold;">🏅 Regular Donor</div>
+                        <div style="opacity: 0.9; margin-top: 5px;">Keep up the great work!</div>
+                    </div>
+                    <div style="padding: 20px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 8px; color: white;">
+                        <div style="font-size: 18px; font-weight: bold;">⭐ Life Saver</div>
+                        <div style="opacity: 0.9; margin-top: 5px;">Your donations save lives</div>
+                    </div>
+                    <div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
+                        <div style="font-size: 18px; font-weight: bold;">💙 Community Hero</div>
+                        <div style="opacity: 0.9; margin-top: 5px;">Thank you for your contribution</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✅ Success!</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <p id="successMessage"></p>
+            <button class="btn btn-primary" onclick="closeModal()" style="margin-top: 20px; width: 100%;">OK</button>
+        </div>
+    </div>
+
+    <!-- Load External JavaScript Only -->
+    <script src="donor_dashboard.js"></script>
+</body>
+</html>
