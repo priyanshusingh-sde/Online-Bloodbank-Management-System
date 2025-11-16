@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CherryClouds - Recipient Dashboard</title>
+    <link rel="shortcut icon" href="https://www.svgrepo.com/show/475183/cherry.svg" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            margin-right: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo::before {
+            content: '🍒';
+            margin-right: 10px;
+            font-size: 28px;
+        }
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -280px;
+            top: 70px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .sidebar-title {
+            padding: 0 20px 10px;
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .sidebar-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #555;
+            transition: all 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background: #f5f7fa;
+            color: #f5576c;
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(90deg, #f5576c 0%, transparent 100%);
+            color: #f5576c;
+            border-left: 4px solid #f5576c;
+        }
+
+        .main-content {
+            margin-top: 70px;
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.shifted {
+            margin-left: 280px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-header p {
+            color: #666;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-info h3 {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .stat-card.requests .stat-icon {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+        }
+
+        .stat-card.pending .stat-icon {
+            background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+        }
+
+        .stat-card.fulfilled .stat-icon {
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .blood-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .blood-card {
+            background: linear-gradient(135deg, #fff 0%, #f5f7fa 100%);
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .blood-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(245, 87, 108, 0.2);
+            border-color: #f5576c;
+        }
+
+        .blood-card.available {
+            border-color: #66bb6a;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .blood-type {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #f5576c;
+        }
+
+        .blood-units {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-danger {
+            background: #f5576c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e04556;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            text-align: left;
+            padding: 15px;
+            background: #f5f7fa;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-badge.approved {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .status-badge.rejected {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .status-badge.fulfilled {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-badge.urgent, .status-badge.critical {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .status-badge.regular {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f5576c;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% - 12px);
+            background: #e0e0e0;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-content {
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content.shifted {
+                margin-left: 0;
+            }
+
+            .sidebar.open {
+                width: 100%;
+                left: 0;
+            }
+
+            .blood-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="logo">CherryClouds</div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar">R</div>
+                <div>
+                    <div style="font-weight: 500;">Loading...</div>
+                    <div style="font-size: 12px; opacity: 0.8;">Patient ID: --</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Dashboard</div>
+            <div class="sidebar-item active" onclick="showSection('dashboard')">
+                📊 Overview
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Blood Requests</div>
+            <div class="sidebar-item" onclick="showSection('search')">
+                🔍 Search Blood
+            </div>
+            <div class="sidebar-item" onclick="showSection('request')">
+                📝 Request Blood
+            </div>
+            <div class="sidebar-item" onclick="showSection('myRequests')">
+                📋 My Requests
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Profile</div>
+            <div class="sidebar-item" onclick="showSection('profile')">
+                👤 My Profile
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-item" onclick="logout()">
+                🚪 Logout
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <!-- Dashboard Section -->
+        <div id="dashboardSection">
+            <div class="dashboard-header">
+                <h1>Welcome Back! 🩸</h1>
+                <p>Track your blood requests and find the blood you need</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card requests">
+                    <div class="stat-info">
+                        <h3>0</h3>
+                        <p>Total Requests</p>
+                    </div>
+                    <div class="stat-icon">📝</div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-info">
+                        <h3>0</h3>
+                        <p>Pending Requests</p>
+                    </div>
+                    <div class="stat-icon">⏳</div>
+                </div>
+                <div class="stat-card fulfilled">
+                    <div class="stat-info">
+                        <h3>0</h3>
+                        <p>Fulfilled Requests</p>
+                    </div>
+                    <div class="stat-icon">✅</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Active Request Status</h2>
+                </div>
+                <div id="activeRequestStatus">
+                    <p style="text-align: center; color: #999;">Loading...</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Requests</h2>
+                    <button class="btn btn-primary" onclick="showSection('request')">+ New Request</button>
+                </div>
+                <div class="table-container">
+                    <table id="recentRequestsTable">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Blood Type</th>
+                                <th>Units</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #999;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div id="searchSection" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Search Blood Availability</h1>
+                <p>Check real-time blood availability across all blood banks</p>
+            </div>
+
+            <div class="card">
+                <div class="search-box">
+                    <select class="search-input" id="searchBloodType">
+                        <option value="">All Blood Types</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="searchBlood()">Search</button>
+                </div>
+
+                <h3 style="margin-bottom: 15px;">Blood Availability</h3>
+                <div class="blood-grid" id="bloodGrid"></div>
+            </div>
+        </div>
+
+        <!-- Request Section -->
+        <div id="requestSection" style="display: none;">
+            <div class="dashboard-header">
+                <h1>Request Blood</h1>
+                <p>Submit a new blood request</p>
+            </div>
+
+            <div class="card">
+                <form id="requestForm" onsubmit="submitRequest(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Blood Type *</label>
+                            <select id="requestBloodType" required>
+                                <option value="">Select blood type</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Number of Units *</label>
+                            <input type="number" id="requestUnits" min="1" max="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Hospital Name *</label>
+                        <input type="text" id="hospitalName" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Required Date *</label>
+                            <input type="date" id="requiredDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Urgency Level *</label>
+                            <select id="urgencyLevel" required>
+                                <option value="">Select urgency</option>
+                                <option value="Critical">Critical</option>
+                                <option value="Urgent">Urgent</option>
+                                <option value="Regular">Regular</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Medical Reason *</label>
+                        <textarea id="medicalReason" rows="4" required placeholder="Please provide details about why you need blood..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Doctor's Name</label>
+                            <input type="text" id="doctorName">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Number *</label>
+                            <input type="tel" id="contactNumber" required>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                        <button type="button" class="btn btn-secondary" onclick="showSection('dashboard')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- My Requests Section -->
+        <div id="myRequestsSection" style="display: none;">
+            <div class="dashboard-header">
+                <h1>My Blood Requests</h1>
+                <p>View and manage all your blood requests</p>
+            </div>
+
+            <div class="card">
+                <div class="table-container">
+                    <table id="allRequestsTable">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Blood Type</th>
+                                <th>Units</th>
+                                <th>Date</th>
+                                <th>Urgency</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: #999;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" style="display: none;">
+            <!-- Profile will be dynamically loaded -->
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✅ Success!</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <p id="successMessage"></p>
+            <button class="btn btn-primary" onclick="closeModal()" style="margin-top: 20px; width: 100%;">OK</button>
+        </div>
+    </div>
+
+    <!-- Load External JavaScript Only -->
+    <script src="recipient_dashboard.js"></script>
+</body>
+</html>
